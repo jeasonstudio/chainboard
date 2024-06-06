@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'The shareable on-chain notebook',
 };
 
-export const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => (
+const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => (
   <html suppressHydrationWarning>
     <head />
     <body className="min-h-screen bg-background text-foreground">
