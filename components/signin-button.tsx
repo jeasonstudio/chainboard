@@ -89,7 +89,7 @@ export const SigninButton = React.forwardRef<
         return (
           <Button {...props} ref={ref} onClick={show}>
             <SiEthereum className="mr-2 h-4 w-4" />
-            Sign-In With Ethereum
+            Sign-In with Ethereum
           </Button>
         );
       }}

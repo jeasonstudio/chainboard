@@ -73,6 +73,9 @@ export const Web3Provider: React.FC<
               '--ck-tertiary-button-border-radius': 'var(--radius)',
               '--ck-qr-border-radius': 'var(--radius)',
               '--ck-recent-badge-border-radius': 'var(--radius)',
+              '--ck-body-background': 'hsl(var(--background))',
+              '--ck-body-background-secondary': 'hsl(var(--secondary))',
+              '--ck-body-background-tertiary': 'hsl(var(--muted))',
             }}
           >
             {children}

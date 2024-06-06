@@ -2,7 +2,7 @@
 
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { SiGithub } from '@icons-pack/react-simple-icons';
+import { SiFarcaster } from '@icons-pack/react-simple-icons';
 import { SigninButton } from '@/components/signin-button';
 import { Web3Provider } from '@/components/web3-provider';
 import { ThemeSwitcher } from '@/components/theme-switcher';
@@ -41,7 +41,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <div className="grid gap-6">
+            <div className="grid gap-4">
               <SigninButton
                 onSignIn={async () => {
                   toast({
@@ -52,6 +52,7 @@ export default function LoginPage() {
                   });
                 }}
               />
+
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t"></span>
@@ -68,14 +69,29 @@ export default function LoginPage() {
                 onClick={() => {
                   toast({
                     title: 'Not supported',
-                    description: 'Login with GitHub is not supported yet',
+                    description: 'Login with Warpcast is not supported yet',
                     variant: 'destructive',
                     duration: 3000,
                   });
                 }}
               >
-                <SiGithub className="mr-2 h-4 w-4" />
-                Login With GitHub
+                <SiFarcaster className="mr-2 h-4 w-4" />
+                Sign-In with Warpcast
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => {
+                  toast({
+                    title: 'Not supported',
+                    description: 'Login with Warpcast is not supported yet',
+                    variant: 'destructive',
+                    duration: 3000,
+                  });
+                }}
+              >
+                {/* <SiFarcaster className="mr-2 h-4 w-4" /> */}
+                Login with Lens Protocol
               </Button>
             </div>
 
