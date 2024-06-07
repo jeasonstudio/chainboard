@@ -66,6 +66,8 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              <SIWFButton variant="outline" />
+
               {/* <Button
                 variant="outline"
                 onClick={() => {
@@ -77,26 +79,8 @@ export default function LoginPage() {
                   });
                 }}
               >
-                <SiFarcaster className="mr-2 h-4 w-4" />
-                Sign-In with Warpcast
-              </Button> */}
-
-              <SIWFButton variant="outline" />
-
-              <Button
-                variant="outline"
-                onClick={() => {
-                  toast({
-                    title: 'Not supported',
-                    description: 'Login with Warpcast is not supported yet',
-                    variant: 'destructive',
-                    duration: 3000,
-                  });
-                }}
-              >
-                {/* <SiFarcaster className="mr-2 h-4 w-4" /> */}
                 Login with Lens Protocol
-              </Button>
+              </Button> */}
             </div>
 
             <p className="px-8 text-center text-sm text-muted-foreground">

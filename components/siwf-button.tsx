@@ -21,8 +21,8 @@ import { QRCode } from './qrcode';
 import { Address } from 'viem';
 import { SessionResponseData } from '../lib/session';
 
-const REFETCH_TIMES = 60;
-const REFETCH_INTERVAL = 3000;
+const REFETCH_TIMES = 90;
+const REFETCH_INTERVAL = 2000;
 const HUB_ENDPOINT = process.env.FARCASTER_HUB_URL || 'hub.pinata.cloud';
 
 export interface SIWFButtonProps extends ButtonProps {
@@ -36,26 +36,21 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
       data: session,
       isFetching: getSessionLoading,
       refetch: refetchSession,
-    } = useQuery<SessionResponseData>({
-      queryKey: ['/api/session'],
-      queryFn: () => request('/api/session'),
-    });
+    } = useQuerySession();
+
     const [info, setInfo] = React.useState<
       Partial<{ name: string; username: string; pfp: string; bio: string }>
     >({});
 
-    const { data: userInfo, isPending: getUserInfoLoading } = useQuery({
+    const { data: userInfo, isFetching: getUserInfoLoading } = useQuery({
       throwOnError: false,
+      enabled: !!session?.fid,
       queryKey: ['getUserInfoFromHub', session?.fid],
-      queryFn: async (ctx) => {
-        if (!ctx.queryKey[1]) {
-          return Promise.resolve(null);
-        } else {
-          return fetch(
-            `https://${HUB_ENDPOINT}/v1/userDataByFid?fid=${ctx.queryKey[1]}`
-          ).then((res) => res.json());
-        }
-      },
+      refetchOnWindowFocus: true,
+      queryFn: () =>
+        fetch(
+          `https://${HUB_ENDPOINT}/v1/userDataByFid?fid=${session?.fid}`
+        ).then((res) => res.json()),
     });
 
     React.useEffect(() => {
@@ -89,6 +84,7 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
           body: JSON.stringify(params),
         }),
       onSuccess: async (address) => {
+        setOpen(false);
         onSignIn?.(address);
         await refetchSession();
       },
@@ -175,7 +171,7 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
           Sign-In with Farcaster
         </Button>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="w-[336px]">
+          <DialogContent className="w-[336px] rounded">
             <DialogHeader>
               <DialogTitle>Sign-In with Farcaster</DialogTitle>
               <DialogDescription className="grid gap-3">
@@ -201,14 +197,17 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
                   </div>
                   <div className="relative flex justify-center text-xs">
                     <span className="bg-background px-2 text-muted-foreground">
-                      or
+                      or continue with
                     </span>
                   </div>
                 </div>
 
                 <Button
                   variant="outline"
-                  onClick={() => window.open(channelUrl)}
+                  onClick={() => {
+                    window.location.href = channelUrl!;
+                    setOpen(false);
+                  }}
                   disabled={getChannelLoading}
                 >
                   <Smartphone className="mr-2 h-4" />
