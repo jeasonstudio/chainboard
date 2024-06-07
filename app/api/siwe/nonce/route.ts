@@ -1,8 +1,8 @@
 import { generateSiweNonce } from 'viem/siwe';
 import { getSession } from '@/lib/session';
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
-export async function GET(request: NextApiRequest) {
+export async function GET(request: NextRequest) {
   const nonce = generateSiweNonce();
 
   const session = await getSession();
