@@ -1,11 +1,12 @@
-import { NextRequest } from 'next/server';
 import { generateSiweNonce } from 'viem/siwe';
 import { getSession } from '@/lib/session';
+import { NextApiRequest } from 'next';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextApiRequest) {
   const nonce = generateSiweNonce();
 
   const session = await getSession();
+  session.type = 'ethereum';
   session.nonce = nonce;
   await session.save();
 

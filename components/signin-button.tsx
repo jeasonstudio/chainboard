@@ -14,25 +14,14 @@ import {
 } from '@/components/ui/tooltip';
 import { useDisconnect } from 'wagmi';
 
-export interface SigninButtonProps extends ButtonProps {
-  onSignIn?: (session?: SIWESession) => void;
-  onSignOut?: () => void;
-}
+export interface SigninButtonProps extends ButtonProps {}
 
 export const SigninButton = React.forwardRef<
   HTMLButtonElement,
   SigninButtonProps
->(({ onSignIn, onSignOut, ...props }, ref) => {
+>(({ ...props }, ref) => {
   const { disconnectAsync } = useDisconnect();
-  const { isSignedIn, signIn, isLoading } = useSIWE({
-    onSignIn: (data?: SIWESession) => {
-      onSignIn?.(data);
-    },
-    onSignOut: () => {
-      onSignOut?.();
-      disconnectAsync();
-    },
-  });
+  const { isSignedIn, signIn, isLoading } = useSIWE();
 
   return (
     <ConnectKitButton.Custom>

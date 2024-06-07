@@ -20,6 +20,10 @@ export async function POST(request: NextRequest) {
   const session = await getSession();
   const siwe = parseSiweMessage(message);
 
+  if (session.type !== 'ethereum') {
+    return new Response('Invalid session type.', { status: 400 });
+  }
+
   if (!session.nonce || siwe.nonce !== session.nonce) {
     return new Response('Nonce not match.', { status: 400 });
   }
@@ -31,5 +35,5 @@ export async function POST(request: NextRequest) {
   session.siwe = siwe;
   await session.save();
 
-  return Response.json(true);
+  return Response.json(siwe.address);
 }

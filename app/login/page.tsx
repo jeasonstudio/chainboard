@@ -2,11 +2,11 @@
 
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { SiFarcaster } from '@icons-pack/react-simple-icons';
 import { SigninButton } from '@/components/signin-button';
-import { Web3Provider } from '@/components/web3-provider';
+import { Web3Provider, Web3SIWEProvider } from '@/components/web3-provider';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { toast } from '@/components/ui/use-toast';
+import { SIWFButton } from '@/components/siwf-button';
 
 export default function LoginPage() {
   return (
@@ -42,8 +42,8 @@ export default function LoginPage() {
             </div>
 
             <div className="grid gap-4">
-              <SigninButton
-                onSignIn={async () => {
+              <Web3SIWEProvider
+                onSignIn={() => {
                   toast({
                     title: 'Successfully',
                     description:
@@ -51,7 +51,9 @@ export default function LoginPage() {
                     duration: 3000,
                   });
                 }}
-              />
+              >
+                <SigninButton />
+              </Web3SIWEProvider>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -64,7 +66,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <Button
+              {/* <Button
                 variant="outline"
                 onClick={() => {
                   toast({
@@ -77,7 +79,9 @@ export default function LoginPage() {
               >
                 <SiFarcaster className="mr-2 h-4 w-4" />
                 Sign-In with Warpcast
-              </Button>
+              </Button> */}
+
+              <SIWFButton variant="outline" />
 
               <Button
                 variant="outline"

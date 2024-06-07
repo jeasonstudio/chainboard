@@ -2,8 +2,15 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
+import { Inter } from 'next/font/google';
 
 import './globals.css';
+import { cn } from '../lib/utils';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'Chainboard',
@@ -13,7 +20,12 @@ export const metadata: Metadata = {
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => (
   <html suppressHydrationWarning>
     <head />
-    <body className="min-h-screen bg-background text-foreground">
+    <body
+      className={cn(
+        'min-h-screen bg-background text-foreground',
+        inter.variable
+      )}
+    >
       <ThemeProvider attribute="class" defaultTheme="system">
         {children}
         <Toaster />
