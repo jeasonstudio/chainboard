@@ -67,23 +67,9 @@ export default function LoginPage() {
               </div>
 
               <SIWFButton variant="outline" />
-
-              {/* <Button
-                variant="outline"
-                onClick={() => {
-                  toast({
-                    title: 'Not supported',
-                    description: 'Login with Warpcast is not supported yet',
-                    variant: 'destructive',
-                    duration: 3000,
-                  });
-                }}
-              >
-                Login with Lens Protocol
-              </Button> */}
             </div>
 
-            <p className="px-8 text-center text-sm text-muted-foreground">
+            <p className="lg:px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our&nbsp;
               <a
                 className="underline underline-offset-4 hover:text-primary"

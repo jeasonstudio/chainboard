@@ -19,7 +19,17 @@ import {
 } from '@/components/ui/dialog';
 import { QRCode } from './qrcode';
 import { Address } from 'viem';
-import { SessionResponseData } from '../lib/session';
+import { useMobile } from '@/lib/use-media-query';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 
 const REFETCH_TIMES = 90;
 const REFETCH_INTERVAL = 2000;
@@ -32,6 +42,9 @@ export interface SIWFButtonProps extends ButtonProps {
 
 export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
   ({ onSignIn, onSignOut, ...props }, ref) => {
+    const isMobile = useMobile();
+    console.log(isMobile);
+
     const {
       data: session,
       isFetching: getSessionLoading,
@@ -157,6 +170,61 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
       );
     }
 
+    const title = <>Sign-In with Farcaster</>;
+    const content = (
+      <div className="grid gap-3 w-[288px] mx-auto">
+        <p className="text-sm text-muted-foreground mt-3 text-left">
+          Scan with your phone&apos;s camera or
+          <a
+            className="underline underline-offset-4 hover:text-primary"
+            href="https://warpcast.com/~/signup"
+            target="_blank"
+          >
+            &nbsp;create an account
+          </a>
+          .
+        </p>
+        <div className="size-72 relative flex justify-center items-center border rounded-md">
+          <QRCode
+            uri={channelUrl || 'https://warpcast.com/'}
+            size={288}
+            loading={getChannelLoading}
+            ecl="low"
+          />
+          <div className="size-12 p-1 absolute rounded-md top-0 left-0 translate-y-[7.5rem] translate-x-[7.5rem] bg-background">
+            {getChannelLoading ? (
+              <LoaderCircle className="size-10 text-foreground animate-spin" />
+            ) : (
+              <SiFarcaster className="size-10 text-foreground color-[#7C65C1]" />
+            )}
+          </div>
+        </div>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t"></span>
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-background px-2 text-muted-foreground">
+              or continue with
+            </span>
+          </div>
+        </div>
+
+        <Button
+          variant="outline"
+          onClick={() => {
+            window.location.href = channelUrl!;
+            setOpen(false);
+          }}
+          disabled={getChannelLoading}
+        >
+          <Smartphone className="mr-2 h-4" />
+          I&apos;m using my phone.
+        </Button>
+      </div>
+    );
+
     return (
       <>
         <Button
@@ -170,53 +238,25 @@ export const SIWFButton = React.forwardRef<HTMLButtonElement, SIWFButtonProps>(
           <SiFarcaster className="mr-2 h-4 w-4" />
           Sign-In with Farcaster
         </Button>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="w-[336px] rounded">
-            <DialogHeader>
-              <DialogTitle>Sign-In with Farcaster</DialogTitle>
-              <DialogDescription className="grid gap-3">
-                <div className="size-72 relative flex justify-center items-center border rounded-md mt-3">
-                  <QRCode
-                    uri={channelUrl || 'https://warpcast.com/'}
-                    size={288}
-                    loading={getChannelLoading}
-                    ecl="low"
-                  />
-                  <div className="size-12 p-1 absolute rounded-md top-0 left-0 translate-y-[7.5rem] translate-x-[7.5rem] bg-background">
-                    {getChannelLoading ? (
-                      <LoaderCircle className="size-10 text-foreground animate-spin" />
-                    ) : (
-                      <SiFarcaster className="size-10 text-foreground" />
-                    )}
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t"></span>
-                  </div>
-                  <div className="relative flex justify-center text-xs">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      or continue with
-                    </span>
-                  </div>
-                </div>
-
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    window.location.href = channelUrl!;
-                    setOpen(false);
-                  }}
-                  disabled={getChannelLoading}
-                >
-                  <Smartphone className="mr-2 h-4" />
-                  I&apos;m using my phone.
-                </Button>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        {isMobile ? (
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>{title}</DrawerTitle>
+                <DrawerDescription>{content}</DrawerDescription>
+              </DrawerHeader>
+            </DrawerContent>
+          </Drawer>
+        ) : (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="rounded w-[336px]">
+              <DialogHeader>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogDescription>{content}</DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        )}
       </>
     );
   }
